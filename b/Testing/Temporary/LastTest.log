@@ -1,0 +1,32 @@
+Start testing: Jan 31 14:08 CST
+----------------------------------------------------------
+1/1 Testing: nqueens
+1/1 Test: nqueens
+Command: "/home/kai/NP/exact_cover/b/test/nqueens/queens_tests"
+Directory: /home/kai/NP/exact_cover/b/test/nqueens
+"nqueens" start time: Jan 31 14:08 CST
+Output:
+----------------------------------------------------------
+[==========] Running 3 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 3 tests from nqTest
+[ RUN      ] nqTest.init
+[       OK ] nqTest.init (0 ms)
+[ RUN      ] nqTest.isvalid_empty
+[       OK ] nqTest.isvalid_empty (0 ms)
+[ RUN      ] nqTest.isvalid_second_row
+[       OK ] nqTest.isvalid_second_row (0 ms)
+[----------] 3 tests from nqTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test case ran. (0 ms total)
+[  PASSED  ] 3 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"nqueens" end time: Jan 31 14:08 CST
+"nqueens" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 31 14:08 CST

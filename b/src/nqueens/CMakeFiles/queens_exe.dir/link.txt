@@ -1,0 +1,1 @@
+/usr/bin/c++    -g    CMakeFiles/queens_exe.dir/main.cpp.o  -o queens_exe -rdynamic libnqueens.a 

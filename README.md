@@ -1,2 +1,5 @@
 # exact_cover
-Some basic Exact Cover problems
+Solutions for Exact Cover problems
+	- N Queens
+	- Sudoku solver
+	- Pentomino solver

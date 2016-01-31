@@ -1,0 +1,3 @@
+/home/kai/NP/exact_cover/b/test/nqueens/CMakeFiles/queens_tests.dir
+/home/kai/NP/exact_cover/b/src/nqueens/CMakeFiles/queens_exe.dir
+/home/kai/NP/exact_cover/b/src/nqueens/CMakeFiles/nqueens.dir

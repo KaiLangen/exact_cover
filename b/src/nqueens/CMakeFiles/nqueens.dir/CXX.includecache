@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/nqueens/n_queens.h
+iostream
+-
+vector
+-
+
+/home/kai/NP/exact_cover/src/nqueens/n_queens.cpp
+cstdlib
+-
+cmath
+-
+nqueens/n_queens.h
+/home/kai/NP/exact_cover/src/nqueens/nqueens/n_queens.h
+
