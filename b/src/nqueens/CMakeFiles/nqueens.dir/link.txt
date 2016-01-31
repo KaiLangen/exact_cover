@@ -1,2 +1,0 @@
-/usr/bin/ar cq libnqueens.a  CMakeFiles/nqueens.dir/n_queens.cpp.o
-/usr/bin/ranlib libnqueens.a

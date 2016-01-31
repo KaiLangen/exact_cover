@@ -1,1 +1,0 @@
-/usr/bin/c++    -g    CMakeFiles/queens_tests.dir/nq_test.cpp.o  -o queens_tests -rdynamic ../../src/nqueens/libnqueens.a -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 
