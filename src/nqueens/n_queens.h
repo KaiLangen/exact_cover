@@ -24,6 +24,10 @@ public:
 	bool is_valid(int row, int col);
 
 	int create_new_queen(int starting_col);
+
+	void print(std::ostream &out) const;
 };
+
+std::ostream &operator<<(std::ostream &out, const Board &b);
 
 #endif

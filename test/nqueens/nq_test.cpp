@@ -20,14 +20,26 @@ TEST (nqTest, isvalid_empty){
 	ASSERT_TRUE(b.is_valid(0,col));
 }
 
-TEST (nqTest, isvalid_second_row){
+TEST (nqTest, create_new_queen4_empty){
 	int n = 4;
 	Board b(n);
 	srand(time(NULL));
 
-	b.moves_.push_back(0);
-	int col = rand() % n;
-	ASSERT_TRUE(b.is_valid(1,col));
+	int result = b.create_new_queen(0);
+	ASSERT_EQ(0, result);
+}
+
+TEST (nqTest, create_new_queen4_all){
+	int n = 4;
+	Board b(n);
+	srand(time(NULL));
+
+	int moves = 0;
+	int result = 0;
+	while(moves != (n - 1)){
+		result = b.create_new_queen(result);
+	}
+	ASSERT_EQ(0, result);
 }
 
 int main(int argc, char **argv){
