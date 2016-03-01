@@ -5,9 +5,10 @@
 #include <vector>
 
 class board {
+typedef std::pair<int,int> pos;
 private:
 	std::vector<std::vector<bool> > positions_;
-	std::vector<int> moves_;
+	std::vector<pos> moves_;
 	int size_;
 
 public:
@@ -15,6 +16,10 @@ public:
 	board(int n);
 
 	bool is_valid(int row, int col);
+
+	bool create_queens_recursive(int current_col);
+
+	bool create_queens_recursive();
 
 	int create_new_queen(int starting_col);
 

@@ -56,6 +56,16 @@ TEST (nqTest, create_new_queen_all){
 	ASSERT_EQ(0, result);
 }
 
+TEST (nqTest, create_queens_recursive){
+	srand(time(NULL));
+	int n = rand()%10 + 4;
+	std::cout<<n<<std::endl;
+	board b(n);
+	srand(time(NULL));
+
+	ASSERT_TRUE(b.create_queens_recursive());
+}
+
 int main(int argc, char **argv){
 	::testing::InitGoogleTest(&argc,argv);
 	return RUN_ALL_TESTS();
