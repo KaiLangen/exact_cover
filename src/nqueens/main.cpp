@@ -17,10 +17,10 @@ int main(int argc, char **argv){
 		std::cin>>n;
 	}
 
-	Board b(n);
+	board b(n);
 	int myMoves = 0;
 	int current_col = rand() % n;
-	while(b.moves_.size() != n){
+	while(b.get_moves_size() != n){
 		current_col = b.create_new_queen(current_col);
 	}
 	std::cout<<b<<std::endl;

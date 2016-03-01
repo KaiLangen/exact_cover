@@ -3,28 +3,28 @@
 
 #include "nqueens/n_queens.h"
 
-Board::Board(int n){
+board::board(int n){
 	srand(time(NULL));
 
-	n_ = n;
+	size_ = n;
 	positions_.resize(n*n);
 
-	//set initial row and col values for each position
+	//set each position as false (does not contain a queen)
 	for (size_t i = 0; i < n; ++i){
-		for (size_t j = 0; j < n; ++j){
-			positions_[i*n + j].row = i;
-			positions_[i*n + j].col = j;
+		positions_[i].resize(n);
+		for(size_t j = 0; j < n; ++j){
+			positions_[i][j] = false;
 		}
 	}
 }
 
-bool Board::is_valid(int row, int col){
+bool board::is_valid(int row, int col){
 	//look at all queens already on the board
 	int moves_row = 0;
 	int moves_col = 0;
 	for(size_t i = 0; i < moves_.size(); ++i){
-		moves_row = moves_[i] / n_;
-		moves_col = moves_[i] % n_;
+		moves_row = moves_[i] / size_;
+		moves_col = moves_[i] % size_;
 		//check for shared columns
 		if(col == moves_col){
 			return false;
@@ -40,43 +40,52 @@ bool Board::is_valid(int row, int col){
 	return true;
 }
 
-int Board::create_new_queen(int starting_col){
+int board::create_new_queen(int starting_col){
 	int newrow = moves_.size();
 	int newcol = starting_col;
 	int index;
 	//check each possible col for valid place
-	for(newcol = starting_col; newcol < n_; ++newcol){
+	for(; newcol < size_; ++newcol){
 		if(is_valid(newrow, newcol)){
-			index = (newrow * n_) + newcol;
+			index = (newrow * size_) + newcol;
 			//if move is valid, add to move history and return 0
 			moves_.push_back(index);
-			positions_[index].has_queen = true;
+			positions_[newrow][newcol] = true;
+			std::cout<<*this<<std::endl;
 			return 0;
 		}
 	}
 	//if reached this section, there are no valid spots in this row
-	//reset previous move (and claim as invalid)
+	//backtrack to previous row (starting at prev column + 1)
+	//set previous move as false and remove from move list
 	if(moves_.size() > 0){
-		newcol = (moves_.back() % n_) + 1;
-		positions_[moves_.back()].has_queen = false;
+		std::cout<< "Row: "<<newrow<<"Col: "<<newcol<<std::endl;
+		index = moves_.back();
+		positions_[(index/size_)][(index%size_)] = false;
+		newcol = (index % size_) + 1;
 		moves_.pop_back();
-	}
-	else
-		newcol = 0;
 
+		std::cout<<*this<<std::endl;
+	}
+	//if there are no previous moves left, placement should not fail!
+	else{
+		std::cout<<"new column is: "<<newcol<<std::endl;
+		std::cout<<"Error: no previous moves left"<<std::endl;
+		exit(EXIT_FAILURE);
+	}
 	return newcol;
 }
 
-void Board::print(std::ostream &out) const{
+void board::print(std::ostream &out) const{
 	for(size_t i = 0; i < moves_.size(); ++i){
-		int ro = moves_[i]/n_;
-		int co = moves_[i]%n_;
+		int ro = moves_[i]/size_;
+		int co = moves_[i]%size_;
 		std::cout<<"queen "<<i<<":("<<ro<<","<<co<<")"<<std::endl;
 	}
 
-	for (size_t i = 0; i < n_; ++i){
-		for (size_t j = 0; j < n_; ++j){
-			if(positions_[(i * n_) + j].has_queen)
+	for (size_t i = 0; i < size_; ++i){
+		for (size_t j = 0; j < size_; ++j){
+			if(positions_[i][j])
 				out<<1;
 			else
 				out<<0;
@@ -87,7 +96,7 @@ void Board::print(std::ostream &out) const{
 	}
 }
 
-std::ostream &operator<<(std::ostream &out, const Board &b){
+std::ostream &operator<<(std::ostream &out, const board &b){
 	b.print(out);
 	return out;
 }

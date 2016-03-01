@@ -4,30 +4,28 @@
 #include <iostream>
 #include <vector>
 
-class Board {
+class board {
 private:
-	struct Position{
-		int col;
-		int row;
-		bool has_queen;
-
-		Position(): col(0), row(0), has_queen(false) {}
-	};
+	std::vector<std::vector<bool> > positions_;
+	std::vector<int> moves_;
+	int size_;
 
 public:
-	std::vector<Position> positions_;
-	std::vector<int> moves_;
-	int n_;
 
-	Board(int n);
+	board(int n);
 
 	bool is_valid(int row, int col);
 
 	int create_new_queen(int starting_col);
 
 	void print(std::ostream &out) const;
+
+	//getters
+	size_t get_pos_size() const {return positions_.size();}
+	size_t get_moves_size() const {return moves_.size();}
+	size_t get_size() const {return size_;}
 };
 
-std::ostream &operator<<(std::ostream &out, const Board &b);
+std::ostream &operator<<(std::ostream &out, const board &b);
 
 #endif
