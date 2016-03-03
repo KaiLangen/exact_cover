@@ -43,6 +43,8 @@ struct puzzle {
 
 	bool fill_slot(size_t index);
 
+	void randomize_first_row();
+
 	void print(std::ostream &out) const;
 };
 

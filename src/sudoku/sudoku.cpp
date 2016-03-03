@@ -1,3 +1,7 @@
+#include <boost/range/algorithm/random_shuffle.hpp>
+#include <time.h>
+#include <stdlib.h>
+
 #include "sudoku/sudoku.h"
 
 slot::slot(int row, int col, puzzle* p){
@@ -21,6 +25,32 @@ puzzle::puzzle(){
 		for(int j = 0; j < n_; ++j){
 			slots_.push_back(slot(i,j, this));
 		}
+	}
+
+	//fill first row
+	randomize_first_row();
+	std::cout<<*this<<std::endl;
+
+	//recursively fill remaining slots
+	fill_slot(n_);
+}
+
+void puzzle::randomize_first_row(){
+	srand(time(NULL));
+	//create a row of vals from 1 to n
+	std::vector<int> vals;
+	for(size_t i = 0; i < n_; ++i)
+		vals.push_back(i+1);
+
+	//randomize their order
+	boost::random_shuffle(vals.begin());
+
+	//insert into first row
+	for(size_t i = 0; i < n_; ++i){
+		slots_[i].val_ = vals[i];
+		slots[i].row_->available_[vals[i]] = false;
+		slots[i].col_->available_[vals[i]] = false;
+		slots[i].group_->available_[vals[i]] = false;
 	}
 }
 
