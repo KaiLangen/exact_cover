@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <time.h>
+#include <stdlib.h>
 
 #include "sudoku/sudoku.h"
 
@@ -31,9 +32,35 @@ puzzle::puzzle(){
 			cells_.push_back(cell(i,j, this));
 		}
 	}
-	std::cout<<*this<<std::endl;
+	//fill first row
+//	randomize_first_row();
+//	std::cout<<*this<<std::endl;
+
 	//randomize cell order
 	std::random_shuffle(cells_.begin(), cells_.end());
+
+	//recursively fill remaining cells
+	//starting on the second row
+	fill_cell(n_);
+}
+
+void puzzle::randomize_first_row(){
+	srand(time(NULL));
+	//create a row of vals from 1 to n
+	std::vector<int> vals;
+	for(size_t i = 0; i < n_; ++i)
+		vals.push_back(i);
+
+	//randomize their order
+	std::random_shuffle(vals.begin(), vals.end());
+
+	//insert into first row
+	for(size_t i = 0; i < n_; ++i){
+		*(cells_[i].val_) = vals[i] + 1;
+		cells_[i].row_->available_[vals[i]] = false;
+		cells_[i].col_->available_[vals[i]] = false;
+		cells_[i].square_->available_[vals[i]] = false;
+	}
 }
 
 bool puzzle::fill_cell(size_t index){
@@ -53,7 +80,6 @@ bool puzzle::fill_cell(size_t index){
 			c.col_->available_[i] = false;
 			c.square_->available_[i] = false;
 			*(c.val_) = i+1;
-			std::cout<<*this<<std::endl;
 			//fill the next cell
 			if(fill_cell(index + 1)){
 				return true;
@@ -68,6 +94,9 @@ bool puzzle::fill_cell(size_t index){
 		}
 	}
 	//default failure case
+	*(c.val_) = 10;
+	std::cout<<*this<<std::endl;
+	exit(EXIT_FAILURE);
 	return false;
 }
 

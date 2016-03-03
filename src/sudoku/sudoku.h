@@ -44,6 +44,8 @@ struct puzzle {
 
 	bool fill_cell(size_t index);
 
+	void randomize_first_row();
+
 	void print(std::ostream &out) const;
 };
 
