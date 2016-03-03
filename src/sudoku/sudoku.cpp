@@ -1,6 +1,10 @@
+#include <algorithm>
+#include <cstdlib>
+#include <time.h>
+
 #include "sudoku/sudoku.h"
 
-slot::slot(int row, int col, puzzle* p){
+cell::cell(int row, int col, puzzle* p){
 	//row and column assignment is straight-forward
 	row_ = &(p->rows_[row]);
 	col_ = &(p->cols_[col]);
@@ -13,44 +17,53 @@ slot::slot(int row, int col, puzzle* p){
 	//
 	int sq_index = (col/sqrt_) + (row/sqrt_) * sqrt_;
 	square_ = &(p->squares_[sq_index]);
-	val_ = 0;
+
+	//val points to the uint value in grid_ at [row][col]
+	val_ = &(p->grid_[row][col]);
+	*(val_) = 0;
 }
 
 puzzle::puzzle(){
+	srand(time(NULL));
+	//initialize grid to zeros
 	for(int i = 0; i < n_; ++i){
 		for(int j = 0; j < n_; ++j){
-			slots_.push_back(slot(i,j, this));
+			cells_.push_back(cell(i,j, this));
 		}
 	}
+	std::cout<<*this<<std::endl;
+	//randomize cell order
+	std::random_shuffle(cells_.begin(), cells_.end());
 }
 
-bool puzzle::fill_slot(size_t index){
+bool puzzle::fill_cell(size_t index){
 	// base success case
-	if(index == slots_.size()){
+	if(index == cells_.size()){
 		return true;
 	}
-	slot& s = slots_[index];
+	cell& c = cells_[index];
 
 	//recursive case
 	for(int i = 0; i < n_; ++i){
-		if(s.row_->available_[i] &&
-		   s.col_->available_[i] &&
-		   s.square_->available_[i]){
+		if(c.row_->available_[i] &&
+		   c.col_->available_[i] &&
+		   c.square_->available_[i]){
 
-			s.row_->available_[i] = false;
-			s.col_->available_[i] = false;
-			s.square_->available_[i] = false;
-			s.val_ = i+1;
-			//fill the next slot
-			if(fill_slot(index + 1)){
+			c.row_->available_[i] = false;
+			c.col_->available_[i] = false;
+			c.square_->available_[i] = false;
+			*(c.val_) = i+1;
+			std::cout<<*this<<std::endl;
+			//fill the next cell
+			if(fill_cell(index + 1)){
 				return true;
 			}
 			else{
 				//reset and continue iterating
-				s.val_ = 0;
-				s.row_->available_[i] = true;
-				s.col_->available_[i] = true;
-				s.square_->available_[i] = true;
+				*(c.val_) = 0;
+				c.row_->available_[i] = true;
+				c.col_->available_[i] = true;
+				c.square_->available_[i] = true;
 			}
 		}
 	}
@@ -61,8 +74,8 @@ bool puzzle::fill_slot(size_t index){
 void puzzle::print(std::ostream &out) const{
 	for (size_t i = 0; i < n_; ++i){
 		for (size_t j = 0; j < n_; ++j){
-			slot s = slots_[(i*n_) + j];
-			out<<s.val_<<" ";
+			out<<grid_[i][j]<<" ";
+
 		}
 		out<<std::endl;
 	}

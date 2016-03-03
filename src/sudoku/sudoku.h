@@ -22,13 +22,13 @@ struct group {
 	}
 };
 
-struct slot {
+struct cell {
 	group* col_;
 	group* row_;
 	group* square_;
-	int val_;
+	unsigned int* val_;
 
-	slot(int row, int col, puzzle* p);
+	cell(int row, int col, puzzle* p);
 };
 
 
@@ -36,12 +36,13 @@ struct puzzle {
 	boost::array<group, n_> rows_;
 	boost::array<group, n_> cols_;
 	boost::array<group, n_> squares_;
+	unsigned int grid_[n_][n_];
 
-	std::vector<slot> slots_;
+	std::vector<cell> cells_;
 
 	puzzle();
 
-	bool fill_slot(size_t index);
+	bool fill_cell(size_t index);
 
 	void print(std::ostream &out) const;
 };
