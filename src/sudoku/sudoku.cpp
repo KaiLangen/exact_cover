@@ -1,4 +1,4 @@
-#include <boost/range/algorithm/random_shuffle.hpp>
+#include <algorithm>
 #include <time.h>
 #include <stdlib.h>
 
@@ -32,6 +32,7 @@ puzzle::puzzle(){
 	std::cout<<*this<<std::endl;
 
 	//recursively fill remaining slots
+	//starting on the second row
 	fill_slot(n_);
 }
 
@@ -40,17 +41,17 @@ void puzzle::randomize_first_row(){
 	//create a row of vals from 1 to n
 	std::vector<int> vals;
 	for(size_t i = 0; i < n_; ++i)
-		vals.push_back(i+1);
+		vals.push_back(i);
 
 	//randomize their order
-	boost::random_shuffle(vals.begin());
+	std::random_shuffle(vals.begin(), vals.end());
 
 	//insert into first row
 	for(size_t i = 0; i < n_; ++i){
-		slots_[i].val_ = vals[i];
-		slots[i].row_->available_[vals[i]] = false;
-		slots[i].col_->available_[vals[i]] = false;
-		slots[i].group_->available_[vals[i]] = false;
+		slots_[i].val_ = vals[i] + 1;
+		slots_[i].row_->available_[vals[i]] = false;
+		slots_[i].col_->available_[vals[i]] = false;
+		slots_[i].square_->available_[vals[i]] = false;
 	}
 }
 
@@ -70,7 +71,7 @@ bool puzzle::fill_slot(size_t index){
 			s.row_->available_[i] = false;
 			s.col_->available_[i] = false;
 			s.square_->available_[i] = false;
-			s.val_ = i+1;
+			s.val_ = i + 1;
 			//fill the next slot
 			if(fill_slot(index + 1)){
 				return true;
