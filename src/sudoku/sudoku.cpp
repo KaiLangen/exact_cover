@@ -1,10 +1,11 @@
 #include <algorithm>
+#include <cstdlib>
 #include <time.h>
 #include <stdlib.h>
 
 #include "sudoku/sudoku.h"
 
-slot::slot(int row, int col, puzzle* p){
+cell::cell(int row, int col, puzzle* p){
 	//row and column assignment is straight-forward
 	row_ = &(p->rows_[row]);
 	col_ = &(p->cols_[col]);
@@ -17,71 +18,80 @@ slot::slot(int row, int col, puzzle* p){
 	//
 	int sq_index = (col/sqrt_) + (row/sqrt_) * sqrt_;
 	square_ = &(p->squares_[sq_index]);
+
 	val_ = 0;
 }
 
 puzzle::puzzle(){
+	srand(time(NULL));
 	for(int i = 0; i < n_; ++i){
 		for(int j = 0; j < n_; ++j){
-			slots_.push_back(slot(i,j, this));
+			cells_.push_back(cell(i,j, this));
 		}
 	}
+
+	//fill vals array with values 1 - n
+	for(size_t i = 0; i < n_; ++i)
+		vals_[i] = i;
 
 	//fill first row
 	randomize_first_row();
 	std::cout<<*this<<std::endl;
 
-	//recursively fill remaining slots
+	//randomize vals_ order a second time
+	//remaining cells will resolve in this order
+	std::random_shuffle(vals_.begin(), vals_.end());
+
+	//recursively fill remaining cells
 	//starting on the second row
-	fill_slot(n_);
+	fill_cell(n_);
 }
 
 void puzzle::randomize_first_row(){
 	srand(time(NULL));
-	//create a row of vals from 1 to n
-	std::vector<int> vals;
-	for(size_t i = 0; i < n_; ++i)
-		vals.push_back(i);
 
 	//randomize their order
-	std::random_shuffle(vals.begin(), vals.end());
+	std::random_shuffle(vals_.begin(), vals_.end());
 
 	//insert into first row
 	for(size_t i = 0; i < n_; ++i){
-		slots_[i].val_ = vals[i] + 1;
-		slots_[i].row_->available_[vals[i]] = false;
-		slots_[i].col_->available_[vals[i]] = false;
-		slots_[i].square_->available_[vals[i]] = false;
+		cells_[i].val_ = vals_[i] + 1;
+		cells_[i].row_->available_[vals_[i]] = false;
+		cells_[i].col_->available_[vals_[i]] = false;
+		cells_[i].square_->available_[vals_[i]] = false;
 	}
 }
 
-bool puzzle::fill_slot(size_t index){
+bool puzzle::fill_cell(size_t index){
 	// base success case
-	if(index == slots_.size()){
+	if(index == cells_.size()){
 		return true;
 	}
-	slot& s = slots_[index];
+
+	cell& c = cells_[index];
+	int val = 0;
 
 	//recursive case
 	for(int i = 0; i < n_; ++i){
-		if(s.row_->available_[i] &&
-		   s.col_->available_[i] &&
-		   s.square_->available_[i]){
+		val = vals_[i];
+		if(c.row_->available_[val] &&
+		   c.col_->available_[val] &&
+		   c.square_->available_[val]){
 
-			s.row_->available_[i] = false;
-			s.col_->available_[i] = false;
-			s.square_->available_[i] = false;
-			s.val_ = i + 1;
-			//fill the next slot
-			if(fill_slot(index + 1)){
+			c.row_->available_[val] = false;
+			c.col_->available_[val] = false;
+			c.square_->available_[val] = false;
+			c.val_ = val + 1;
+			//fill the next cell
+			if(fill_cell(index + 1)){
 				return true;
 			}
 			else{
 				//reset and continue iterating
-				s.val_ = 0;
-				s.row_->available_[i] = true;
-				s.col_->available_[i] = true;
-				s.square_->available_[i] = true;
+				c.val_ = 0;
+				c.row_->available_[val] = true;
+				c.col_->available_[val] = true;
+				c.square_->available_[val] = true;
 			}
 		}
 	}
@@ -92,8 +102,8 @@ bool puzzle::fill_slot(size_t index){
 void puzzle::print(std::ostream &out) const{
 	for (size_t i = 0; i < n_; ++i){
 		for (size_t j = 0; j < n_; ++j){
-			slot s = slots_[(i*n_) + j];
-			out<<s.val_<<" ";
+			cell c = cells_[(i*n_) + j];
+			out<<c.val_<<" ";
 		}
 		out<<std::endl;
 	}
