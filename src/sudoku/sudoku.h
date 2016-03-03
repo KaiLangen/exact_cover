@@ -26,7 +26,7 @@ struct cell {
 	group* col_;
 	group* row_;
 	group* square_;
-	unsigned int* val_;
+	unsigned int val_;
 
 	cell(int row, int col, puzzle* p);
 };
@@ -36,7 +36,7 @@ struct puzzle {
 	boost::array<group, n_> rows_;
 	boost::array<group, n_> cols_;
 	boost::array<group, n_> squares_;
-	unsigned int grid_[n_][n_];
+	boost::array<unsigned int, n_> vals_;
 
 	std::vector<cell> cells_;
 
