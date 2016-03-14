@@ -1,16 +1,16 @@
-#ifndef sudoku_h
-#define sudoku_h
+#ifndef generator_h
+#define generator_h
 
 #include <boost/array.hpp>
 #include <iostream>
 #include <vector>
 #include <math.h>
 
-//forward declaration of puzzle
-struct puzzle;
+//forward declaration of solution
+struct solution;
 
-static const int n_ = 9;
-static const int sqrt_ = sqrt(n_);
+const int n_ = 9;
+const int sqrt_ = sqrt(n_);
 
 struct group {
 	boost::array<bool, n_> available_;
@@ -28,11 +28,11 @@ struct cell {
 	group* square_;
 	unsigned int val_;
 
-	cell(int row, int col, puzzle* p);
+	cell(int row, int col, solution* s);
 };
 
 
-struct puzzle {
+struct solution {
 	boost::array<group, n_> rows_;
 	boost::array<group, n_> cols_;
 	boost::array<group, n_> squares_;
@@ -40,7 +40,7 @@ struct puzzle {
 
 	std::vector<cell> cells_;
 
-	puzzle();
+	solution();
 
 	bool fill_cell(size_t index);
 
@@ -49,6 +49,6 @@ struct puzzle {
 	void print(std::ostream &out) const;
 };
 
-std::ostream &operator<<(std::ostream &out, const puzzle &p);
+std::ostream &operator<<(std::ostream &out, const solution &s);
 
 #endif
