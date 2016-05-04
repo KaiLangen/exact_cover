@@ -1,14 +1,17 @@
+/**
+* sudoku/generator.cpp
+*/
 #include <algorithm>
 #include <cstdlib>
 #include <time.h>
 #include <stdlib.h>
 
-#include "sudoku/sudoku.h"
+#include "sudoku/generator.h"
 
-cell::cell(int row, int col, puzzle* p){
+cell::cell(int row, int col, solution* s){
 	//row and column assignment is straight-forward
-	row_ = &(p->rows_[row]);
-	col_ = &(p->cols_[col]);
+	row_ = &(s->rows_[row]);
+	col_ = &(s->cols_[col]);
 
 	//square assignment is a little more complicated
 	//for n = 9, squares would be:
@@ -16,13 +19,12 @@ cell::cell(int row, int col, puzzle* p){
 	// 3 4 5
 	// 6 7 8
 	//
-	int sq_index = (col/sqrt_) + (row/sqrt_) * sqrt_;
-	square_ = &(p->squares_[sq_index]);
+	square_ = &(s->squares_[square_index(row,col)]);
 
 	val_ = 0;
 }
 
-puzzle::puzzle(){
+solution::solution(){
 	srand(time(NULL));
 	for(int i = 0; i < n_; ++i){
 		for(int j = 0; j < n_; ++j){
@@ -47,7 +49,7 @@ puzzle::puzzle(){
 	fill_cell(n_);
 }
 
-void puzzle::randomize_first_row(){
+void solution::randomize_first_row(){
 	srand(time(NULL));
 
 	//randomize their order
@@ -62,7 +64,7 @@ void puzzle::randomize_first_row(){
 	}
 }
 
-bool puzzle::fill_cell(size_t index){
+bool solution::fill_cell(size_t index){
 	// base success case
 	if(index == cells_.size()){
 		return true;
@@ -99,7 +101,7 @@ bool puzzle::fill_cell(size_t index){
 	return false;
 }
 
-void puzzle::print(std::ostream &out) const{
+void solution::print(std::ostream &out) const{
 	for (size_t i = 0; i < n_; ++i){
 		for (size_t j = 0; j < n_; ++j){
 			cell c = cells_[(i*n_) + j];
@@ -109,7 +111,7 @@ void puzzle::print(std::ostream &out) const{
 	}
 }
 
-std::ostream &operator<<(std::ostream &out, const puzzle& p){
-	p.print(out);
+std::ostream &operator<<(std::ostream &out, const solution &s){
+	s.print(out);
 	return out;
 }
