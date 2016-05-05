@@ -1,3 +1,6 @@
+/**
+* sudoku/generator.cpp
+*/
 #include <algorithm>
 #include <cstdlib>
 #include <time.h>
@@ -16,8 +19,7 @@ cell::cell(int row, int col, solution* s){
 	// 3 4 5
 	// 6 7 8
 	//
-	int sq_index = (col/sqrt_) + (row/sqrt_) * sqrt_;
-	square_ = &(s->squares_[sq_index]);
+	square_ = &(s->squares_[square_index(row,col)]);
 
 	val_ = 0;
 }

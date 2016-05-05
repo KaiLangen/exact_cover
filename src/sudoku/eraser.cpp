@@ -1,3 +1,7 @@
+/**
+* sudoku/eraser.cpp
+*/
+
 #include <algorithm>
 #include <cstdlib>
 #include <time.h>
@@ -7,10 +11,6 @@
 #include "sudoku/eraser.h"
 
 sudoku_grid::sudoku_grid(std::string filename){
-	//assert that has the correct file extension
-//	boost::filesystem::path p(filename.c_str());
-//	std::string ext = p.extension();
-//	assert(strcmp(ext,".sudoku") == 0);
 
 	std::ifstream myfile(filename.c_str());
 	if(myfile.is_open()){

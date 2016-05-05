@@ -1,3 +1,6 @@
+/**
+* main.cpp
+*/
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
@@ -33,7 +36,7 @@ int main(int argc, char **argv){
 	sudoku_grid sg(filename.str());
 	construct_puzzle(sg);
 	std::cout<<sg<<std::endl;
-	solve(sg);
+//	solve(sg);
 
 	return 0;
 }
